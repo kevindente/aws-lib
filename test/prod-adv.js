@@ -13,5 +13,20 @@ describe('Product Advertisement API', function() {
         done(err)
       })
     })
+
+    it('should support using a proxy server', function(done) {
+      var prodAdv = aws.createProdAdvClient(credentials.accessKeyId, credentials.secretAccessKey, "",
+                                            {secure: false,
+                                             host: "ecs.amazonaws.com", //<- specify a proxy host here
+                                             path: "http://ecs.amazonaws.com/onca/xml",
+                                             port: 80}
+                                            );
+      
+      prodAdv.call("ItemSearch", {SearchIndex: "Books", Keywords: "Javascript"}, function(err, res) {
+        assert.ok(res.Items);
+        done(err)
+      })
+    });
+    
   })
 })
